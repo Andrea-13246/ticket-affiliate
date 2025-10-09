@@ -1,0 +1,16 @@
+- name: Send event to Telegram
+  run: |
+    EVENT_TITLE="Concertone Milano 2025"
+    EVENT_DATE="12 Giugno 2025"
+    EVENT_CITY="Milano"
+    EVENT_VENUE="Stadio San Siro"
+    EVENT_PRICE="35"
+    EVENT_URL="https://vivafest.it/evento?id=123&aff=abc"
+    EVENT_IMAGE="https://vivafest.github.io/ticket-affiliate/img/sansiro.jpg"
+
+    # Invia immagine + messaggio
+    curl -s -X POST "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendPhoto" \
+      -F chat_id="${{ secrets.CHAT_ID }}" \
+      -F photo="$EVENT_IMAGE" \
+      -F caption="<b>${EVENT_TITLE}</b>\n📍 ${EVENT_CITY} — ${EVENT_VENUE}\n🗓️ ${EVENT_DATE}\n💶 Prezzo: €${EVENT_PRICE}\n\n<a href='${EVENT_URL}'>🎟️ Acquista ora</a>" \
+      -F parse_mode="HTML"
