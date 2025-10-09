@@ -1,16 +1,26 @@
 [
   {
-    "titolo": "Vasco Rossi Live",
-    "data": "2025-10-15",
-    "luogo": "Stadio Olimpico, Roma",
-    "link": "https://www.ticketone.it/event/vasco-rossi-roma",
-    "immagine": "https://vivafest.github.io/ticket-affiliate/images/vasco.jpg"
+    "id": "1",
+    "title": "Concertone Milano 2025",
+    "date": "12 Giugno 2025",
+    "time": "21:00",
+    "city": "Milano",
+    "venue": "Stadio San Siro",
+    "price": "35",
+    "url": "https://vivafest.it/evento?id=123",
+    "affid": "abc",
+    "image": "https://vivafest.github.io/ticket-affiliate/img/sansiro.jpg"
   },
   {
-    "titolo": "Eros Ramazzotti Tour",
-    "data": "2025-10-20",
-    "luogo": "Mediolanum Forum, Milano",
-    "link": "https://www.ticketone.it/event/eros-ramazzotti-milano",
-    "immagine": "https://vivafest.github.io/ticket-affiliate/images/eros.jpg"
+    "id": "2",
+    "title": "Festival Roma 2025",
+    "date": "20 Luglio 2025",
+    "time": "20:00",
+    "city": "Roma",
+    "venue": "Ippodromo Capannelle",
+    "price": "45",
+    "url": "https://vivafest.it/evento?id=456",
+    "affid": "xyz",
+    "image": "https://vivafest.github.io/ticket-affiliate/img/roma.jpg"
   }
 ]
