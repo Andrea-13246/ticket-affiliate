@@ -1,16 +1,36 @@
-- name: Send event to Telegram
-  run: |
-    EVENT_TITLE="Concertone Milano 2025"
-    EVENT_DATE="12 Giugno 2025"
-    EVENT_CITY="Milano"
-    EVENT_VENUE="Stadio San Siro"
-    EVENT_PRICE="35"
-    EVENT_URL="https://vivafest.it/evento?id=123&aff=abc"
-    EVENT_IMAGE="https://vivafest.github.io/ticket-affiliate/img/sansiro.jpg"
+name: AutoPost Telegram Events
 
-    # Invia immagine + messaggio
-    curl -s -X POST "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendPhoto" \
-      -F chat_id="${{ secrets.CHAT_ID }}" \
-      -F photo="$EVENT_IMAGE" \
-      -F caption="<b>${EVENT_TITLE}</b>\n📍 ${EVENT_CITY} — ${EVENT_VENUE}\n🗓️ ${EVENT_DATE}\n💶 Prezzo: €${EVENT_PRICE}\n\n<a href='${EVENT_URL}'>🎟️ Acquista ora</a>" \
-      -F parse_mode="HTML"
+on:
+  schedule:
+    - cron: '0 * * * *'  # ogni ora
+  workflow_dispatch:
+
+jobs:
+  send_event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Send latest event to Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          sudo apt-get install -y curl jq
+
+          # Scarica il primo evento dal file JSON
+          response=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json)
+          titolo=$(echo "$response" | jq -r '.[0].titolo')
+          data=$(echo "$response" | jq -r '.[0].data')
+          luogo=$(echo "$response" | jq -r '.[0].luogo')
+          link=$(echo "$response" | jq -r '.[0].link')
+          immagine=$(echo "$response" | jq -r '.[0].immagine')
+
+          testo="🎤 *${titolo}*\n📅 ${data}\n📍 ${luogo}\n\n[🎟️ Acquista biglietto qui](${link})"
+
+          curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" \
+            -F chat_id="$CHAT_ID" \
+            -F photo="$immagine" \
+            -F parse_mode="Markdown" \
+            -F caption="$testo"
