@@ -19,25 +19,26 @@
 <div id="eventi"></div>
 
 <script>
-fetch("https://raw.githubusercontent.com/vivafest/ticket-affiliate/main/events.json")
+fetch("https://vivafest.github.io/ticket-affiliate/events.json")
   .then(res => res.json())
   .then(data => {
     let html = "";
     data.forEach(ev => {
+      const link = `${ev.url}?aff=${ev.affid}`;
       html += `
         <div class="evento">
-          <img src="${ev.immagine}" alt="${ev.titolo}">
-          <h3>${ev.titolo}</h3>
-          <p><strong>${ev.luogo}</strong><br>${ev.data}</p>
-          <a href="${ev.link}" target="_blank">🎟️ Acquista Biglietto</a>
+          <img src="${ev.image}" alt="${ev.title}">
+          <h3>${ev.title}</h3>
+          <p><strong>${ev.city}</strong> — ${ev.venue}<br>${ev.date} alle ${ev.time}</p>
+          <p><strong>Prezzo:</strong> €${ev.price}</p>
+          <a href="${link}" target="_blank">🎟️ Acquista Biglietto</a>
         </div>
       `;
     });
     document.getElementById("eventi").innerHTML = html;
   })
   .catch(err => {
-    document.getElementById("eventi").innerHTML = "<p>Errore nel caricamento degli eventi.</p>";
-    console.error(err);
+    console.error("Errore nel caricamento eventi:", err);
   });
 </script>
 </body>
