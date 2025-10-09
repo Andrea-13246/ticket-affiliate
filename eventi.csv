@@ -1,6 +1,0 @@
-id,title,date,time,city,venue,price,ticket_base_url,affiliate_id,image
-CON-001,Vasco Rossi - Bari,2025-06-15,21:00,Bari,StadioSan Nicola,89,https://www.ticketone.it/event/vasco-rossi-bari,TUO_ID,https://upload.wikimedia.org/wikipedia/commons/7/72/Vasco_Rossi_Live.jpg
-CON-002,Coldplay - Roma,2025-07-09,21:00,Roma,Stadio Olimpico,120,https://www.ticketone.it/event/coldplay-roma,TUO_ID,https://upload.wikimedia.org/wikipedia/commons/2/2b/ColdplayVivaLaVida.jpg
-TEA-001,Notre Dame de Paris,2025-11-22,20:30,Milano,Teatro Arcimboldi,45,https://www.ticketone.it/event/notre-dame-de-paris-milano,TUO_ID,https://upload.wikimedia.org/wikipedia/commons/4/44/Teatro_Arcimboldi_Milano.jpg
-CIN-001,Joker: Folie à Deux,2025-10-12,22:00,Roma,Multisala Roma,10,https://www.cinematickets.it/joker-2-roma,TUO_ID,https://upload.wikimedia.org/wikipedia/en/1/15/Joker_Folie_a_Deux_poster.jpg
-CIN-002,Inside Out 2,2025-10-20,18:30,Firenze,The Space Cinema,9,https://www.cinematickets.it/inside-out-2-firenze,TUO_ID,https://upload.wikimedia.org/wikipedia/en/b/b5/Inside_Out_2_poster.jpg
