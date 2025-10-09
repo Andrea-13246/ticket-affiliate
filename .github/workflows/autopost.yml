@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install jq
-        run: sudo apt-get install -y jq
+        run: sudo apt-get update && sudo apt-get install -y jq curl
 
       - name: Send latest event to Telegram
         env:
@@ -21,12 +21,13 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
           FILE="events.json"
+
           if [ ! -f "$FILE" ]; then
             echo "File $FILE non trovato!"
             exit 1
           fi
 
-          EVENT=$(jq -r '.[0]' $FILE)
+          EVENT=$(jq -r '.[0]' "$FILE")
           TITLE=$(echo $EVENT | jq -r '.title')
           CITY=$(echo $EVENT | jq -r '.city')
           VENUE=$(echo $EVENT | jq -r '.venue')
@@ -36,12 +37,21 @@ jobs:
           AFF=$(echo $EVENT | jq -r '.affid')
           IMAGE=$(echo $EVENT | jq -r '.image')
 
+          if [ -z "$IMAGE" ]; then
+            echo "IMAGE vuoto! Controlla events.json"
+            exit 1
+          fi
+
           FINAL_URL="${URL}?aff=${AFF}"
 
           echo "Invio evento: $TITLE"
 
           curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
-            -F chat_id="${CHAT_ID}" \
+            -F chat_id="$CHAT_ID" \
             -F photo="$IMAGE" \
-            -F caption="<b>${TITLE}</b>\n📍 ${CITY} — ${VENUE}\n🗓️ ${DATE}\n💶 Prezzo: €${PRICE}\n\n<a href='${FINAL_URL}'>🎟️ Acquista ora</a>" \
+            -F caption="Evento: $TITLE
+📍 $CITY — $VENUE
+🗓️ $DATE
+💶 Prezzo: €$PRICE
+🎟️ Acquista: $FINAL_URL" \
             -F parse_mode="HTML"
