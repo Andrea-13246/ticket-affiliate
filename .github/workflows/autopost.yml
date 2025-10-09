@@ -9,25 +9,47 @@ jobs:
   send_event:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Send latest event to Telegram
+      - name: Send latest event(s) to Telegram
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
-          sudo apt-get install -y curl jq
-          events=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json | jq -r '.[0]')
-          titolo=$(echo $events | jq -r '.titolo')
-          data=$(echo $events | jq -r '.data')
-          luogo=$(echo $events | jq -r '.luogo')
-          link=$(echo $events | jq -r '.link')
-          immagine=$(echo $events | jq -r '.immagine')
+          sudo apt-get update && sudo apt-get install -y curl jq
 
-          testo="🎤 *${titolo}*\n📅 ${data}\n📍 ${luogo}\n🔗 [Biglietti qui](${link})"
-          curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" \
-            -F chat_id="$CHAT_ID" \
-            -F photo="$immagine" \
-            -F parse_mode="Markdown" \
-            -F caption="$testo"
+          # Scarica events.json
+          events=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json)
+
+          # Controlla se il JSON è vuoto
+          if [ "$events" == "null" ] || [ "$events" == "[]" ] || [ -z "$events" ]; then
+            echo "Nessun evento da inviare"
+            exit 0
+          fi
+
+          # Cicla su tutti gli eventi
+          count=$(echo "$events" | jq length)
+          for i in $(seq 0 $(($count - 1))); do
+            evento=$(echo "$events" | jq -r ".[$i]")
+
+            titolo=$(echo "$evento" | jq -r '.titolo')
+            data=$(echo "$evento" | jq -r '.data')
+            luogo=$(echo "$evento" | jq -r '.luogo')
+            link=$(echo "$evento" | jq -r '.link')
+            immagine=$(echo "$evento" | jq -r '.immagine')
+
+            # Escape MarkdownV2 (opzionale se usi parse_mode MarkdownV2)
+            titolo_escaped=$(echo "$titolo" | sed 's/[_*\[\]()~`>#+\-=|{}.!]/\\&/g')
+            data_escaped=$(echo "$data" | sed 's/[_*$begin:math:display$$end:math:display$()~`>#+\-=|{}.!]/\\&/g')
+            luogo_escaped=$(echo "$luogo" | sed 's/[_*\[\]()~`>#+\-=|{}.!]/\\&/g')
+            link_escaped=$(echo "$link" | sed 's/[_*$begin:math:display$$end:math:display$()~`>#+\-=|{}.!]/\\&/g')
+
+            testo="🎤 *${titolo_escaped}*\n📅 ${data_escaped}\n📍 ${luogo_escaped}\n🔗 [Biglietti qui](${link_escaped})"
+
+            curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" \
+              -F chat_id="$CHAT_ID" \
+              -F photo="$immagine" \
+              -F parse_mode="MarkdownV2" \
+              -F caption="$testo"
+          done
