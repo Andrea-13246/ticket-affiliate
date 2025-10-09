@@ -1,0 +1,33 @@
+name: AutoPost Telegram Events
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # ogni ora
+  workflow_dispatch:
+
+jobs:
+  send_event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Send latest event to Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          sudo apt-get install -y curl jq
+          events=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json | jq -r '.[0]')
+          titolo=$(echo $events | jq -r '.titolo')
+          data=$(echo $events | jq -r '.data')
+          luogo=$(echo $events | jq -r '.luogo')
+          link=$(echo $events | jq -r '.link')
+          immagine=$(echo $events | jq -r '.immagine')
+
+          testo="🎤 *${titolo}*\n📅 ${data}\n📍 ${luogo}\n🔗 [Biglietti qui](${link})"
+          curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" \
+            -F chat_id="$CHAT_ID" \
+            -F photo="$immagine" \
+            -F parse_mode="Markdown" \
+            -F caption="$testo"
