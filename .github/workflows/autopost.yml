@@ -18,18 +18,19 @@ jobs:
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
           sudo apt-get install -y curl jq
-          events=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json | jq -r '.[0]')
-          titolo=$(echo $events | jq -r '.titolo')
-          data=$(echo $events | jq -r '.data')
-          luogo=$(echo $events | jq -r '.luogo')
-          link=$(echo $events | jq -r '.link')
-          immagine=$(echo $events | jq -r '.immagine')
 
-          echo "Evento letto: $titolo, $data, $luogo"
+          # Scarica il primo evento dal file JSON
+          response=$(curl -s https://vivafest.github.io/ticket-affiliate/events.json)
+          titolo=$(echo "$response" | jq -r '.[0].titolo')
+          data=$(echo "$response" | jq -r '.[0].data')
+          luogo=$(echo "$response" | jq -r '.[0].luogo')
+          link=$(echo "$response" | jq -r '.[0].link')
+          immagine=$(echo "$response" | jq -r '.[0].immagine')
 
-          testo="🎤 <b>${titolo}</b>\n📅 ${data}\n📍 ${luogo}\n🔗 <a href='${link}'>Biglietti qui</a>"
+          testo="🎤 *${titolo}*\n📅 ${data}\n📍 ${luogo}\n\n[🎟️ Acquista biglietto qui](${link})"
+
           curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" \
             -F chat_id="$CHAT_ID" \
             -F photo="$immagine" \
-            -F parse_mode="HTML" \
+            -F parse_mode="Markdown" \
             -F caption="$testo"
