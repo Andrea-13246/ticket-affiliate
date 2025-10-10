@@ -8,7 +8,7 @@
     "price": "89",
     "url": "https://www.ticketone.it/event/coldplay",
     "affid": "vivafest123",
-    "image": "https://vivafest.github.io/ticket-affiliate/img/coldplay.jpg"
+    "image": "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=800"
   },
   {
     "title": "Travis Scott - Utopia Live",
@@ -19,6 +19,6 @@
     "price": "99",
     "url": "https://www.ticketone.it/event/travis-scott",
     "affid": "vivafest123",
-    "image": "https://vivafest.github.io/ticket-affiliate/img/travis.jpg"
+    "image": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800"
   }
 ]
