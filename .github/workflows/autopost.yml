@@ -1,43 +1,52 @@
-name: AutoPost Telegram Events CSV
+name: AutoPost Telegram Events
 
 on:
   schedule:
-    - cron: '0 * * * *'  # ogni ora
+    - cron: '0 * * * *'   # ogni ora
   workflow_dispatch:
 
 jobs:
-  send_event_csv:
+  send_event:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Send latest event to Telegram
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y shuf
+
+      - name: Send random event to Telegram
         env:
-          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           FILE="events.csv"
-
           if [ ! -f "$FILE" ]; then
-            echo "❌ File $FILE non trovato!"
+            echo "File $FILE non trovato!"
             exit 1
           fi
 
-          # Leggi la prima riga di dati (salta intestazione)
-          IFS=',' read -r TITLE CITY VENUE DATE TIME PRICE URL AFF IMAGE < <(tail -n +2 "$FILE" | head -n 1)
+          # Scegli una categoria a caso
+          CATEGORY=$(awk -F',' 'NR>1 {print $10}' "$FILE" | sort | uniq | shuf -n1)
+          echo "🎲 Categoria scelta: $CATEGORY"
 
-          FINAL_URL="${URL}?aff=${AFF}"
-          CAPTION="<b>${TITLE}</b>%0A📍 ${CITY} — ${VENUE}%0A🗓️ ${DATE} alle ${TIME}%0A💶 Prezzo: €${PRICE}%0A%0A<a href='${FINAL_URL}'>🎟️ Acquista ora</a>"
+          # Scegli un evento a caso di quella categoria
+          EVENT=$(awk -F',' -v cat="$CATEGORY" 'NR>1 && $10==cat {print $0}' "$FILE" | shuf -n1)
 
-          echo "📤 Invio evento: $TITLE"
-          echo "🖼️ Immagine: $IMAGE"
+          TITLE=$(echo "$EVENT" | cut -d',' -f1)
+          CITY=$(echo "$EVENT" | cut -d',' -f2)
+          VENUE=$(echo "$EVENT" | cut -d',' -f3)
+          DATE=$(echo "$EVENT" | cut -d',' -f4)
+          TIME=$(echo "$EVENT" | cut -d',' -f5)
+          PRICE=$(echo "$EVENT" | cut -d',' -f6)
+          URL=$(echo "$EVENT" | cut -d',' -f7)
+          AFFID=$(echo "$EVENT" | cut -d',' -f8)
+          IMAGE=$(echo "$EVENT" | cut -d',' -f9)
 
-          RESPONSE=$(curl -s \
-            -G "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
-            --data-urlencode "chat_id=${CHAT_ID}" \
-            --data-urlencode "photo=${IMAGE}" \
-            --data-urlencode "caption=${CAPTION}" \
-            --data-urlencode "parse_mode=HTML")
+          TEXT="🎟️ *${TITLE}*\n📍 ${CITY} – ${VENUE}\n📅 ${DATE} ⏰ ${TIME}\n💶 ${PRICE}€\n\n[Compra ora](${URL}?affid=${AFFID})"
 
-          echo "Risposta Telegram: $RESPONSE"
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto" \
+            -F chat_id="${TELEGRAM_CHAT_ID}" \
+            -F photo="${IMAGE}" \
+            -F parse_mode="Markdown" \
+            -F caption="$TEXT"
