@@ -11,6 +11,7 @@
     font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     background: linear-gradient(180deg, #f3f5f9 0%, #e8ecf3 100%);
     color: #222;
+    padding-bottom: 70px; /* spazio per la navbar mobile */
   }
 
   header {
@@ -20,6 +21,9 @@
     padding: 25px 10px;
     border-radius: 0 0 20px 20px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
 
   header h1 {
@@ -125,6 +129,41 @@
     color: #777;
     padding: 20px 0;
   }
+
+  /* ====== NAVBAR MOBILE ====== */
+  .navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.08);
+    z-index: 200;
+  }
+
+  .nav-item {
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  .nav-item svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+    margin: 0 auto 4px;
+  }
+
+  .nav-item.active {
+    color: #0056b3;
+  }
 </style>
 </head>
 <body>
@@ -141,6 +180,27 @@
   </div>
 
   <div id="eventi"></div>
+
+  <div class="navbar">
+    <a href="#" class="nav-item active" id="nav-home">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 .5l6 6V15a1 1 0 0 1-1 1h-3V9H6v7H3a1 1 0 0 1-1-1V6.5l6-6z"/>
+      </svg>
+      Home
+    </a>
+    <a href="#eventi" class="nav-item" id="nav-categorie">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M3 3h10v2H3V3zm0 4h10v2H3V7zm0 4h10v2H3v-2z"/>
+      </svg>
+      Categorie
+    </a>
+    <a href="https://t.me/TicketAffiliateHub_IT" target="_blank" class="nav-item" id="nav-telegram">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 1.999a1.3 1.3 0 0 0-1.408-.277L.74 6.528a.75.75 0 0 0 .07 1.404l3.766 1.178 1.394 4.485a.75.75 0 0 0 1.282.294l1.876-1.866 3.61 2.644a.75.75 0 0 0 1.18-.445l2.07-11.999a1.3 1.3 0 0 0-.06-.747z"/>
+      </svg>
+      Telegram
+    </a>
+  </div>
 
   <footer>
     © 2025 TicketAffiliate • Powered by GitHub
