@@ -39,11 +39,10 @@ jobs:
           IMAGE=$(echo "$EVENT" | jq -r '.image')
 
           FINAL_URL="${URL}?aff=${AFF}"
+          CAPTION="<b>${TITLE}</b>%0A📍 ${CITY} — ${VENUE}%0A🗓️ ${DATE}%0A💶 Prezzo: €${PRICE}%0A%0A<a href='${FINAL_URL}'>🎟️ Acquista ora</a>"
 
-          RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
-            -F chat_id="${CHAT_ID}" \
-            -F photo="${IMAGE}" \
-            -F caption="<b>${TITLE}</b>\n📍 ${CITY} — ${VENUE}\n🗓️ ${DATE}\n💶 Prezzo: €${PRICE}\n\n<a href='${FINAL_URL}'>🎟️ Acquista ora</a>" \
-            -F parse_mode="HTML")
+          echo "📤 Invio immagine da: $IMAGE"
+
+          RESPONSE=$(curl -s "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}&photo=${IMAGE}&caption=${CAPTION}&parse_mode=HTML")
 
           echo "Risposta Telegram: $RESPONSE"
