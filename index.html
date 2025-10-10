@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>🎟️ Eventi e Concerti - Biglietti Ufficiali</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 30px; background:#f8f8f8; }
+  .evento { background:#fff; padding:15px; margin-bottom:20px; border-radius:10px; box-shadow:0 0 6px rgba(0,0,0,0.1); }
+  img { width: 100%; max-width: 400px; border-radius:8px; display:block; margin-bottom:10px; }
+  h3 { margin:10px 0 5px; }
+  a { background:#007bff; color:#fff; padding:10px 15px; border-radius:5px; text-decoration:none; }
+  a:hover { background:#0056b3; }
+</style>
+</head>
+<body>
+<h1>🎫 Eventi, Concerti e Cinema 2025</h1>
+<p>Scopri i migliori eventi in Italia — con link ufficiali e affiliati aggiornati automaticamente.</p>
+
+<div id="eventi"></div>
+
+<script>
+fetch("events.csv")
+  .then(res => res.text())
+  .then(csvText => {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    let html = "";
+    lines.slice(1).forEach(line => {
+      if(!line.trim()) return;
+      const values = line.split(',');
+      const ev = {};
+      headers.forEach((h,i) => ev[h] = values[i]);
+      const link = `${ev.url}?aff=${ev.affid}`;
+      html += `
+        <div class="evento">
+          <img src="${ev.image}" alt="${ev.title}" onerror="this.style.display='none'">
+          <h3>${ev.title}</h3>
+          <p><strong>${ev.city}</strong> — ${ev.venue}<br>${ev.date} alle ${ev.time}</p>
+          <p><strong>Prezzo:</strong> €${ev.price}</p>
+          <a href="${link}" target="_blank">🎟️ Acquista Biglietto</a>
+        </div>
+      `;
+    });
+    document.getElementById("eventi").innerHTML = html;
+  })
+  .catch(err => console.error("Errore nel caricamento eventi:", err));
+</script>
+</body>
+</html>
