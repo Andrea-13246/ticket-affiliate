@@ -12,19 +12,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y jq curl
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
       - name: Send latest event to Telegram
         env:
           BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          set -euo pipefail
-
           FILE="events.json"
           if [ ! -f "$FILE" ]; then
-            echo "File $FILE non trovato!"
+            echo "❌ File $FILE non trovato!"
             exit 1
           fi
 
@@ -38,29 +36,21 @@ jobs:
           AFF=$(echo "$EVENT" | jq -r '.affid')
           IMAGE=$(echo "$EVENT" | jq -r '.image')
 
-          if [ -z "$IMAGE" ]; then
-            echo "IMAGE vuoto! Controlla events.json"
-            exit 1
-          fi
-
           FINAL_URL="${URL}?aff=${AFF}"
 
-          CAPTION=$(cat <<EOF
-<b>${TITLE}</b>
-📍 ${CITY} — ${VENUE}
-🗓️ ${DATE}
-💶 Prezzo: €${PRICE}
-
-<a href="${FINAL_URL}">🎟️ Acquista ora</a>
-EOF
-)
-
-          echo "Invio evento: $TITLE"
+          echo "📤 Invio evento: $TITLE"
 
           RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
             -F chat_id="${CHAT_ID}" \
             -F photo="${IMAGE}" \
-            -F caption="${CAPTION}" \
+            -F caption="<b>${TITLE}</b>\n📍 ${CITY} — ${VENUE}\n🗓️ ${DATE}\n💶 Prezzo: €${PRICE}\n\n<a href='${FINAL_URL}'>🎟️ Acquista ora</a>" \
             -F parse_mode="HTML")
 
           echo "Risposta Telegram: $RESPONSE"
+
+          if echo "$RESPONSE" | grep -q '"ok":true'; then
+            echo "✅ Evento inviato con successo!"
+          else
+            echo "❌ Errore durante l'invio del messaggio Telegram!"
+            exit 1
+          fi
