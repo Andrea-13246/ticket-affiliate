@@ -1,3 +1,5 @@
-title,city,venue,date,time,price,url,affid,image
-Coldplay - Music of the Spheres Tour,Milano,Stadio San Siro,12 Giugno 2025,21:00,89,https://www.ticketone.it/event/coldplay,vivafest123,https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=800
-Travis Scott - Utopia Live,Roma,Ippodromo Capannelle,20 Luglio 2025,20:30,99,https://www.ticketone.it/event/travis-scott,vivafest123,https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800
+title,city,venue,date,time,price,url,affid,image,category
+Coldplay - Music of the Spheres Tour,Milano,Stadio San Siro,12 Giugno 2025,21:00,89,https://www.ticketone.it/event/coldplay,vivafest123,https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=800,concerti
+Travis Scott - Utopia Live,Roma,Ippodromo Capannelle,20 Luglio 2025,20:30,99,https://www.ticketone.it/event/travis-scott,vivafest123,https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800,concerti
+Dune: Parte Due,Milano,The Space Cinema,1 Novembre 2025,18:30,12,https://www.ticketone.it/event/dune2,vivafest123,https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?w=800,cinema
+Romeo e Giulietta,Firenze,Teatro della Pergola,5 Dicembre 2025,20:00,45,https://www.ticketone.it/event/romeo-juliet,vivafest123,https://images.unsplash.com/photo-1605111225111-0a5c22c52f48?w=800,teatro
