@@ -17,7 +17,7 @@ jobs:
 
       - name: Send latest event to Telegram
         env:
-          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKE }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           FILE="events.json"
@@ -26,7 +26,15 @@ jobs:
             exit 1
           fi
 
-          EVENT=$(jq -r '.[0]' "$FILE")
+          # Legge il primo evento, indipendentemente dal formato (array o singolo oggetto)
+          if jq -e 'type=="array"' "$FILE" > /dev/null; then
+            EVENT=$(jq -r '.[0]' "$FILE")
+          else
+            EVENT=$(cat "$FILE")
+          fi
+
+          echo "Contenuto evento: $EVENT"
+
           TITLE=$(echo "$EVENT" | jq -r '.title')
           CITY=$(echo "$EVENT" | jq -r '.city')
           VENUE=$(echo "$EVENT" | jq -r '.venue')
@@ -36,8 +44,12 @@ jobs:
           AFF=$(echo "$EVENT" | jq -r '.affid')
           IMAGE=$(echo "$EVENT" | jq -r '.image')
 
-          FINAL_URL="${URL}?aff=${AFF}"
+          if [ -z "$TITLE" ] || [ "$TITLE" == "null" ]; then
+            echo "❌ Nessun evento valido trovato nel file JSON"
+            exit 1
+          fi
 
+          FINAL_URL="${URL}?aff=${AFF}"
           echo "📤 Invio evento: $TITLE"
 
           RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
