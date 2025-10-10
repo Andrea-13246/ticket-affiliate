@@ -1,0 +1,49 @@
+name: AutoPost Telegram Events
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # ogni ora
+  workflow_dispatch:
+
+jobs:
+  send_event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Send latest event to Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          FILE="events.json"
+
+          if [ ! -f "$FILE" ]; then
+            echo "❌ File $FILE non trovato!"
+            exit 1
+          fi
+
+          EVENT=$(jq '.[0]' "$FILE")
+
+          TITLE=$(echo "$EVENT" | jq -r '.title')
+          CITY=$(echo "$EVENT" | jq -r '.city')
+          VENUE=$(echo "$EVENT" | jq -r '.venue')
+          DATE=$(echo "$EVENT" | jq -r '.date')
+          PRICE=$(echo "$EVENT" | jq -r '.price')
+          URL=$(echo "$EVENT" | jq -r '.url')
+          AFF=$(echo "$EVENT" | jq -r '.affid')
+          IMAGE=$(echo "$EVENT" | jq -r '.image')
+
+          FINAL_URL="${URL}?aff=${AFF}"
+
+          RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" \
+            -F chat_id="${CHAT_ID}" \
+            -F photo="${IMAGE}" \
+            -F caption="<b>${TITLE}</b>\n📍 ${CITY} — ${VENUE}\n🗓️ ${DATE}\n💶 Prezzo: €${PRICE}\n\n<a href='${FINAL_URL}'>🎟️ Acquista ora</a>" \
+            -F parse_mode="HTML")
+
+          echo "Risposta Telegram: $RESPONSE"
