@@ -2,46 +2,195 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>🎟️ Eventi e Concerti - Biglietti Ufficiali</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎟️ Biglietti Ufficiali – Concerti, Cinema e Teatro</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 30px; background:#f8f8f8; }
-  .evento { background:#fff; padding:15px; margin-bottom:20px; border-radius:10px; box-shadow:0 0 6px rgba(0,0,0,0.1); }
-  img { width: 100%; max-width: 400px; border-radius:8px; display:block; margin-bottom:10px; }
-  h3 { margin:10px 0 5px; }
-  a { background:#007bff; color:#fff; padding:10px 15px; border-radius:5px; text-decoration:none; }
-  a:hover { background:#0056b3; }
+  /* ====== GENERALI ====== */
+  body {
+    margin: 0;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(180deg, #f3f5f9 0%, #e8ecf3 100%);
+    color: #222;
+  }
+
+  header {
+    background: #007bff;
+    color: white;
+    text-align: center;
+    padding: 25px 10px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+
+  header h1 {
+    font-size: 1.8em;
+    margin: 0;
+  }
+
+  header p {
+    margin: 5px 0 0;
+    font-size: 0.95em;
+  }
+
+  /* ====== CATEGORIE ====== */
+  .categories {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .cat-btn {
+    background: white;
+    color: #007bff;
+    border: 2px solid #007bff;
+    padding: 8px 15px;
+    border-radius: 25px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .cat-btn.active,
+  .cat-btn:hover {
+    background: #007bff;
+    color: white;
+  }
+
+  /* ====== LISTA EVENTI ====== */
+  #eventi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 15px;
+    max-width: 1000px;
+    margin: 0 auto 60px;
+  }
+
+  .evento {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .evento:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  }
+
+  .evento img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .evento-content {
+    padding: 15px;
+  }
+
+  .evento h3 {
+    margin: 0 0 5px;
+    font-size: 1.1em;
+  }
+
+  .evento p {
+    margin: 4px 0;
+    font-size: 0.9em;
+    color: #555;
+  }
+
+  .evento a {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    margin-top: 8px;
+  }
+
+  .evento a:hover {
+    background: #0056b3;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.8em;
+    color: #777;
+    padding: 20px 0;
+  }
 </style>
 </head>
 <body>
-<h1>🎫 Eventi, Concerti e Cinema 2025</h1>
-<p>Scopri i migliori eventi in Italia — con link ufficiali e affiliati aggiornati automaticamente.</p>
+  <header>
+    <h1>🎟️ Biglietti Ufficiali</h1>
+    <p>Concerti • Cinema • Teatro — scopri e acquista ora</p>
+  </header>
 
-<div id="eventi"></div>
+  <div class="categories">
+    <button class="cat-btn active" data-cat="all">Tutti</button>
+    <button class="cat-btn" data-cat="concerti">🎶 Concerti</button>
+    <button class="cat-btn" data-cat="cinema">🎬 Cinema</button>
+    <button class="cat-btn" data-cat="teatro">🎭 Teatro</button>
+  </div>
+
+  <div id="eventi"></div>
+
+  <footer>
+    © 2025 TicketAffiliate • Powered by GitHub
+  </footer>
 
 <script>
 fetch("events.csv")
   .then(res => res.text())
   .then(csvText => {
-    const lines = csvText.split('\n');
+    const lines = csvText.trim().split('\n');
     const headers = lines[0].split(',');
-    let html = "";
-    lines.slice(1).forEach(line => {
-      if(!line.trim()) return;
+    const data = lines.slice(1).map(line => {
       const values = line.split(',');
-      const ev = {};
-      headers.forEach((h,i) => ev[h] = values[i]);
-      const link = `${ev.url}?aff=${ev.affid}`;
-      html += `
-        <div class="evento">
-          <img src="${ev.image}" alt="${ev.title}" onerror="this.style.display='none'">
-          <h3>${ev.title}</h3>
-          <p><strong>${ev.city}</strong> — ${ev.venue}<br>${ev.date} alle ${ev.time}</p>
-          <p><strong>Prezzo:</strong> €${ev.price}</p>
-          <a href="${link}" target="_blank">🎟️ Acquista Biglietto</a>
-        </div>
-      `;
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = values[i]);
+      return obj;
     });
-    document.getElementById("eventi").innerHTML = html;
+
+    const eventiContainer = document.getElementById("eventi");
+
+    function render(category = "all") {
+      eventiContainer.innerHTML = "";
+      data.forEach(ev => {
+        if (category !== "all" && ev.category !== category) return;
+        const link = `${ev.url}?aff=${ev.affid}`;
+        const card = `
+          <div class="evento">
+            <img src="${ev.image}" alt="${ev.title}" onerror="this.style.display='none'">
+            <div class="evento-content">
+              <h3>${ev.title}</h3>
+              <p><strong>${ev.city}</strong> — ${ev.venue}</p>
+              <p>${ev.date} • ${ev.time}</p>
+              <p><strong>€${ev.price}</strong></p>
+              <a href="${link}" target="_blank">🎟️ Acquista</a>
+            </div>
+          </div>
+        `;
+        eventiContainer.insertAdjacentHTML("beforeend", card);
+      });
+    }
+
+    render();
+
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        render(btn.dataset.cat);
+      });
+    });
   })
   .catch(err => console.error("Errore nel caricamento eventi:", err));
 </script>
