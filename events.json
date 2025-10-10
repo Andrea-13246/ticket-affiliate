@@ -1,26 +1,24 @@
 [
   {
-    "id": "1",
-    "title": "Concertone Milano 2025",
-    "date": "12 Giugno 2025",
-    "time": "21:00",
+    "title": "Coldplay - Music of the Spheres Tour",
     "city": "Milano",
     "venue": "Stadio San Siro",
-    "price": "35",
-    "url": "https://vivafest.it/evento?id=123",
-    "affid": "abc",
-    "image": "https://vivafest.github.io/ticket-affiliate/img/sansiro.jpg"
+    "date": "12 Giugno 2025",
+    "time": "21:00",
+    "price": "89",
+    "url": "https://www.ticketone.it/event/coldplay",
+    "affid": "vivafest123",
+    "image": "https://vivafest.github.io/ticket-affiliate/img/coldplay.jpg"
   },
   {
-    "id": "2",
-    "title": "Festival Roma 2025",
-    "date": "20 Luglio 2025",
-    "time": "20:00",
+    "title": "Travis Scott - Utopia Live",
     "city": "Roma",
     "venue": "Ippodromo Capannelle",
-    "price": "45",
-    "url": "https://vivafest.it/evento?id=456",
-    "affid": "xyz",
-    "image": "https://vivafest.github.io/ticket-affiliate/img/roma.jpg"
+    "date": "20 Luglio 2025",
+    "time": "20:30",
+    "price": "99",
+    "url": "https://www.ticketone.it/event/travis-scott",
+    "affid": "vivafest123",
+    "image": "https://vivafest.github.io/ticket-affiliate/img/travis.jpg"
   }
 ]
