@@ -1,258 +1,188 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎟️ Biglietti Ufficiali – Concerti, Cinema e Teatro</title>
-<style>
-  /* ====== GENERALI ====== */
-  body {
-    margin: 0;
-    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(180deg, #f3f5f9 0%, #e8ecf3 100%);
-    color: #222;
-    padding-bottom: 70px; /* spazio per la navbar mobile */
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎟️ Ticket Affiliate Hub</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3917/3917033.png" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fc;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      text-align: center;
+    }
 
-  header {
-    background: #007bff;
-    color: white;
-    text-align: center;
-    padding: 25px 10px;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+    header {
+      background: linear-gradient(135deg, #4b6cb7, #182848);
+      color: #fff;
+      padding: 2rem 1rem;
+      margin-bottom: 1rem;
+    }
 
-  header h1 {
-    font-size: 1.8em;
-    margin: 0;
-  }
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
 
-  header p {
-    margin: 5px 0 0;
-    font-size: 0.95em;
-  }
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
 
-  /* ====== CATEGORIE ====== */
-  .categories {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-    flex-wrap: wrap;
-  }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem auto;
+      max-width: 700px;
+    }
 
-  .cat-btn {
-    background: white;
-    color: #007bff;
-    border: 2px solid #007bff;
-    padding: 8px 15px;
-    border-radius: 25px;
-    font-size: 0.9em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+    .cat-btn {
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
 
-  .cat-btn.active,
-  .cat-btn:hover {
-    background: #007bff;
-    color: white;
-  }
+    .cat-btn:hover {
+      background: #4b6cb7;
+      color: #fff;
+      transform: scale(1.05);
+    }
 
-  /* ====== LISTA EVENTI ====== */
-  #eventi {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 15px;
-    max-width: 1000px;
-    margin: 0 auto 60px;
-  }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: auto;
+    }
 
-  .evento {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
 
-  .evento:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-  }
+    .card:hover {
+      transform: translateY(-5px);
+    }
 
-  .evento img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-  }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
 
-  .evento-content {
-    padding: 15px;
-  }
+    .info {
+      padding: 1rem;
+    }
 
-  .evento h3 {
-    margin: 0 0 5px;
-    font-size: 1.1em;
-  }
+    .info h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
 
-  .evento p {
-    margin: 4px 0;
-    font-size: 0.9em;
-    color: #555;
-  }
+    .info p {
+      margin: 0.2rem 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
 
-  .evento a {
-    display: inline-block;
-    background: #007bff;
-    color: white;
-    padding: 10px 14px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9em;
-    margin-top: 8px;
-  }
+    .buy {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: #4b6cb7;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
 
-  .evento a:hover {
-    background: #0056b3;
-  }
+    .buy:hover {
+      background: #182848;
+    }
 
-  footer {
-    text-align: center;
-    font-size: 0.8em;
-    color: #777;
-    padding: 20px 0;
-  }
-
-  /* ====== NAVBAR MOBILE ====== */
-  .navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 8px 0;
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.08);
-    z-index: 200;
-  }
-
-  .nav-item {
-    text-align: center;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 0.8em;
-    font-weight: 600;
-  }
-
-  .nav-item svg {
-    width: 24px;
-    height: 24px;
-    display: block;
-    margin: 0 auto 4px;
-  }
-
-  .nav-item.active {
-    color: #0056b3;
-  }
-</style>
+    footer {
+      margin: 2rem 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🎟️ Biglietti Ufficiali</h1>
-    <p>Concerti • Cinema • Teatro — scopri e acquista ora</p>
+    <h1>🎟️ Ticket Affiliate Hub</h1>
+    <p>Scopri eventi, concerti, cinema, teatri, parchi, zoo, mostre e spettacoli in tutta Italia</p>
   </header>
 
   <div class="categories">
-    <button class="cat-btn active" data-cat="all">Tutti</button>
+    <button class="cat-btn" data-cat="tutti">⭐ Tutti</button>
     <button class="cat-btn" data-cat="concerti">🎶 Concerti</button>
     <button class="cat-btn" data-cat="cinema">🎬 Cinema</button>
     <button class="cat-btn" data-cat="teatro">🎭 Teatro</button>
+    <button class="cat-btn" data-cat="parchi">🌳 Parchi</button>
+    <button class="cat-btn" data-cat="zoo">🐾 Zoo</button>
+    <button class="cat-btn" data-cat="mostre">🖼️ Mostre</button>
+    <button class="cat-btn" data-cat="spettacoli">🎪 Spettacoli</button>
   </div>
 
-  <div id="eventi"></div>
-
-  <div class="navbar">
-    <a href="#" class="nav-item active" id="nav-home">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M8 .5l6 6V15a1 1 0 0 1-1 1h-3V9H6v7H3a1 1 0 0 1-1-1V6.5l6-6z"/>
-      </svg>
-      Home
-    </a>
-    <a href="#eventi" class="nav-item" id="nav-categorie">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M3 3h10v2H3V3zm0 4h10v2H3V7zm0 4h10v2H3v-2z"/>
-      </svg>
-      Categorie
-    </a>
-    <a href="https://t.me/TicketAffiliateHub_IT" target="_blank" class="nav-item" id="nav-telegram">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M16 1.999a1.3 1.3 0 0 0-1.408-.277L.74 6.528a.75.75 0 0 0 .07 1.404l3.766 1.178 1.394 4.485a.75.75 0 0 0 1.282.294l1.876-1.866 3.61 2.644a.75.75 0 0 0 1.18-.445l2.07-11.999a1.3 1.3 0 0 0-.06-.747z"/>
-      </svg>
-      Telegram
-    </a>
-  </div>
+  <div class="container" id="events"></div>
 
   <footer>
-    © 2025 TicketAffiliate • Powered by GitHub
+    🔗 Seguici su <a href="https://t.me/TicketAffiliateHub_IT" target="_blank">Telegram</a>  
+    <br>© 2025 Ticket Affiliate Hub – Tutti i diritti riservati
   </footer>
 
-<script>
-fetch("events.csv")
-  .then(res => res.text())
-  .then(csvText => {
-    const lines = csvText.trim().split('\n');
-    const headers = lines[0].split(',');
-    const data = lines.slice(1).map(line => {
-      const values = line.split(',');
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = values[i]);
-      return obj;
-    });
-
-    const eventiContainer = document.getElementById("eventi");
-
-    function render(category = "all") {
-      eventiContainer.innerHTML = "";
-      data.forEach(ev => {
-        if (category !== "all" && ev.category !== category) return;
-        const link = `${ev.url}?aff=${ev.affid}`;
-        const card = `
-          <div class="evento">
-            <img src="${ev.image}" alt="${ev.title}" onerror="this.style.display='none'">
-            <div class="evento-content">
-              <h3>${ev.title}</h3>
-              <p><strong>${ev.city}</strong> — ${ev.venue}</p>
-              <p>${ev.date} • ${ev.time}</p>
-              <p><strong>€${ev.price}</strong></p>
-              <a href="${link}" target="_blank">🎟️ Acquista</a>
-            </div>
-          </div>
-        `;
-        eventiContainer.insertAdjacentHTML("beforeend", card);
+  <script>
+    async function loadEvents() {
+      const res = await fetch('events.csv');
+      const text = await res.text();
+      const rows = text.split('\n').slice(1).filter(r => r.trim() !== '');
+      const events = rows.map(r => {
+        const [title, city, venue, date, time, price, url, affid, image, category] = r.split(',');
+        return { title, city, venue, date, time, price, url, affid, image, category };
       });
+
+      const container = document.getElementById('events');
+      const buttons = document.querySelectorAll('.cat-btn');
+
+      function display(category) {
+        container.innerHTML = '';
+        const filtered = category === 'tutti' ? events : events.filter(e => e.category === category);
+        filtered.forEach(e => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${e.image}" alt="${e.title}">
+            <div class="info">
+              <h3>${e.title}</h3>
+              <p>📍 ${e.city} – ${e.venue}</p>
+              <p>📅 ${e.date} ⏰ ${e.time}</p>
+              <p>💶 ${e.price}€</p>
+              <a class="buy" href="${e.url}?affid=${e.affid}" target="_blank">Compra Ora</a>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      buttons.forEach(b => b.addEventListener('click', () => display(b.dataset.cat)));
+      display('tutti');
     }
 
-    render();
-
-    document.querySelectorAll(".cat-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        render(btn.dataset.cat);
-      });
-    });
-  })
-  .catch(err => console.error("Errore nel caricamento eventi:", err));
-</script>
+    loadEvents();
+  </script>
 </body>
 </html>
