@@ -138,7 +138,31 @@
     <button class="cat-btn" data-cat="spettacoli">🎪 Spettacoli</button>
     <button class="cat-btn" data-cat="sport">🏟️ Sport</button>
   </div>
+<section id="musement">
+  <h2>🎟️ Esperienze in evidenza da Musement</h2>
 
+  <div
+    id="musement-widget"
+    data-whitelabel-domain="www.musement.com"
+    data-market-prefix="it"
+    data-city-slug="roma"
+    data-number-of-elements="6"
+  ></div>
+
+  <script
+    src="https://whitelabel-widget.musement.com/bootstrap.js"
+    async="async"
+    type="text/javascript"
+  ></script>
+
+  <script>
+    // 🎲 Seleziona una città casuale da mostrare ogni volta
+    const cities = ["roma", "milano", "napoli", "firenze", "venezia", "torino", "bologna", "verona"];
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    document.getElementById("musement-widget").setAttribute("data-city-slug", randomCity);
+  </script>
+  
+</section>
   <div class="container" id="events"></div>
 
   <footer>
